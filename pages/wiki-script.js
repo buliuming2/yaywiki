@@ -1,100 +1,105 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ================= 配置区域 =================
-    // 请修改这里为你实际的 markdown 文件路径
-    // 如果是本地直接打开 html，fetch 可能会报错(CORS)，建议使用 VSCode 的 "Live Server" 插件运行
-    const MD_FILE_PATH = './wikimd/cs.md';
-    // ===========================================
-
     const mdContainer = document.getElementById('md-render-target');
     const navList = document.getElementById('sidebar-nav');
 
-    // 1. 获取并渲染 Markdown
-    fetch(MD_FILE_PATH)
+    // 1. 启动：先获取我们之前手写好的目录树 JSON
+    fetch('./pages/sidebar-tree.json')
         .then(response => {
-            if (!response.ok) throw new Error("无法加载文件");
-            return response.text();
+            if (!response.ok) throw new Error("无法加载目录配置文件");
+            return response.json();
         })
-        .then(markdownText => {
-            // 使用 marked 库转换 MD 为 HTML
-            const htmlContent = marked.parse(markdownText);
-            mdContainer.innerHTML = htmlContent;
-
-            // 渲染完成后，生成目录
-            generateSidebar();
-
-            // 启动滚动监听
-            setupScrollSpy();
+        .then(treeData => {
+            renderSidebarTree(treeData); // 渲染左侧菜单
+            
+            // 默认加载第一篇文章
+            if (treeData.length > 0) {
+                loadMarkdown(treeData[0].path);
+            }
         })
         .catch(err => {
-            mdContainer.innerHTML = `<p style="color:red">加载失败: ${err.message}<br>提示: 请使用 Live Server 运行以支持 fetch。</p>`;
+            mdContainer.innerHTML = `<p style="color:red">初始化失败: ${err.message}</p>`;
         });
 
-    // 2. 自动生成侧边栏目录
-    function generateSidebar() {
-        // 获取内容区所有的 h1, h2, h3
-        const headings = mdContainer.querySelectorAll('h1, h2, h3');
-
-        headings.forEach((heading, index) => {
-            // 给每个标题添加唯一 ID，方便锚点跳转
-            const id = `section-${index}`;
-            heading.id = id;
-
-            // 创建列表项
+    // 2. 渲染左侧导航树
+    function renderSidebarTree(data) {
+        navList.innerHTML = ''; // 清空旧菜单
+        data.forEach(item => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.href = `#${id}`;
-            a.textContent = heading.textContent;
-            a.dataset.target = id; // 存储对应的目标 ID
+            a.href = '#';
+            a.textContent = item.title.replace('.md', ''); // 去掉后缀显示
+            a.dataset.path = item.path;
 
-            // 根据标题层级缩进
-            if (heading.tagName === 'H2') a.style.paddingLeft = '24px';
-            if (heading.tagName === 'H3') a.style.paddingLeft = '36px';
+            // 点击事件：加载对应的 MD 文件
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadMarkdown(item.path);
+                
+                // 切换高亮状态
+                navList.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                a.classList.add('active');
+            });
 
             li.appendChild(a);
             navList.appendChild(li);
         });
-
-        // 默认选中第一个
-        if (navList.firstChild) {
-            navList.firstChild.querySelector('a').classList.add('active');
-        }
     }
 
-    // 3. 滚动监听 (Scroll Spy)
+    // 3. 核心：加载并渲染 Markdown 内容
+    function loadMarkdown(filePath) {
+        mdContainer.innerHTML = '<p>加载中...</p>';
+        
+        fetch(filePath)
+            .then(res => {
+                if (!res.ok) throw new Error("无法加载文件: " + filePath);
+                return res.text();
+            })
+            .then(mdText => {
+                mdContainer.innerHTML = marked.parse(mdText);
+                setupScrollSpy(); // 重新绑定右侧滚动高亮
+            })
+            .catch(err => {
+                mdContainer.innerHTML = `<p style="color:red">${err.message}</p>`;
+            });
+    }
+
+    // 4. 滚动自动高亮（完美复用你之前的优秀逻辑）
     function setupScrollSpy() {
+        // 每次加载新文章，都要移除旧的监听器防止内存泄漏
+        window.removeEventListener('scroll', window.scrollSpyHandler); 
+
         const links = navList.querySelectorAll('a');
         const sections = [];
 
-        // 收集所有 section 的位置信息
         links.forEach(link => {
             const targetId = link.getAttribute('href').substring(1);
             const targetEl = document.getElementById(targetId);
             if (targetEl) sections.push({ el: targetEl, link: link });
         });
 
-        // 监听滚动事件
-        window.addEventListener('scroll', () => {
+        const handleScroll = () => {
             let current = '';
             const scrollY = window.scrollY;
 
-            // 找到当前视口中最靠上的那个章节
             sections.forEach(section => {
-                // offsetTop 是元素距离顶部的距离，减去一点偏移量(如 100)体验更好
                 if (scrollY >= section.el.offsetTop - 100) {
                     current = section.link.getAttribute('href');
                 }
             });
 
-            // 更新高亮状态
             links.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === current) {
                     link.classList.add('active');
-
-                    // 可选：自动滚动侧边栏以保持当前项可见
                     link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
             });
-        });
+        };
+
+        window.scrollSpyHandler = handleScroll;
+        window.addEventListener('scroll', handleScroll);
+        
+        // 触发一次，确保刚进来时高亮是对的
+        handleScroll(); 
     }
 });
