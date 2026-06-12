@@ -1,0 +1,85 @@
+/* =========================================
+   1. 全局与页面背景设置
+   ========================================= */
+body {
+    background-color: #01050a; /* 深邃暗黑背景 */
+    color: #e2e8f0; /* 柔和的浅灰白色文字，保护视力 */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 现代无衬线字体 */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6; /* 增加行高，提升阅读体验 */
+}
+
+/* =========================================
+   2. 导航栏整体布局 (Flexbox + 毛玻璃)
+   ========================================= */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Logo靠左，链接靠右 */
+    align-items: center;
+    padding: 0 20px;
+    background-color: rgba(255, 255, 255, 0.05); /* 半透明深色背景 */
+    backdrop-filter: blur(10px); /* 毛玻璃模糊效果 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 细微的分割线 */
+    position: sticky; /* 滚动时吸顶 */
+    top: 0;
+    z-index: 1000;
+}
+
+/* Logo 样式 */
+.logo h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #38bdf8; /* 科技蓝高亮 */
+}
+
+/* 导航链接取消默认列表样式并横向排列 */
+.nav-links {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* =========================================
+   3. 链接样式与过渡动画
+   ========================================= */
+.nav-links li a {
+    display: block;
+    color: #94a3b8; /* 默认状态使用稍微暗淡的颜色 */
+    text-align: center;
+    padding: 16px 24px; /* 增加内边距，让点击区域更大 */
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease; /* 核心：添加平滑过渡动画 */
+}
+
+/* 鼠标悬停效果 */
+.nav-links li a:hover {
+    color: #ffffff; /* 悬停时文字变白 */
+    background-color: rgba(255, 255, 255, 0.1); /* 悬停时背景微微发亮 */
+}
+
+/* 当前激活状态的样式 (可选) */
+.nav-links li a.active {
+    color: #38bdf8; /* 科技蓝高亮 */
+    border-bottom: 2px solid #38bdf8;
+}
+
+/* =========================================
+   4. 页面内容区排版优化
+   ========================================= */
+.content-wrapper {
+    max-width: 800px; /* 限制最大宽度，防止大屏下文字拉得太长 */
+    margin: 40px auto; /* 水平居中 */
+    padding: 0 20px;
+}
+
+/* 副标题样式 */
+.subtitle {
+    color: #94a3b8;
+    font-size: 16px;
+    margin-top: -10px;
+}

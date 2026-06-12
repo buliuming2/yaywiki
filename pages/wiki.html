@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YayAlliance Wiki - 文档浏览</title>
+    <!-- 引入你的全局样式 -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- 引入 Wiki 专用样式 -->
+    <link rel="stylesheet" href="./wiki-style.css">
+    <!-- 引入 Marked.js 库 (用于将 MD 转为 HTML) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="wiki-page-body">
+
+    <!-- 顶部导航 (可选) -->
+    <nav class="navbar">
+        <div class="logo"><a href="../index.html">← 返回主页</a></div>
+    </nav>
+
+    <div class="wiki-container">
+        <!-- 1. 左侧侧边栏：目录将由 JS 自动生成 -->
+        <aside class="wiki-sidebar">
+            <h3>目录导航</h3>
+            <ul id="sidebar-nav" class="sidebar-nav">
+                <!-- JS 会自动填充这里 -->
+            </ul>
+        </aside>
+
+        <!-- 2. 右侧主内容区：Markdown 将渲染在这里 -->
+        <main class="wiki-content">
+            <div id="md-render-target" class="markdown-body">
+                <p>正在加载文档...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- 核心逻辑脚本 -->
+    <script src="./wiki-script.js"></script>
+</body>
+</html>

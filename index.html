@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 确保在移动端完美缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO与展示优化：给网页一个有意义的标题，而不是默认的 Document -->
+    <title>YayAlliance Wiki - 豆芽人联盟</title>
+    
+    <!-- 引入样式表（建议放在 head 中，避免页面闪烁） -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <!-- 1. 使用 <nav> 标签代替单纯的 <ul>，对屏幕阅读器和搜索引擎更友好 -->
+    <nav class="navbar">
+        <!-- Logo/标题区域 -->
+        <div class="logo">
+            <h3>YayAlliance Wiki</h3>
+        </div>
+        
+        <!-- 导航链接区域 -->
+        <ul class="nav-links">
+            <li><a href="./index.html" class="active">主页</a></li>
+            <li><a href="./pages/wiki.html">Wiki</a></li>
+        </ul>
+    </nav>
+
+    <!-- 2. 将核心内容包裹在 <main> 标签中，明确页面的主要内容区 -->
+    <main class="content-wrapper">
+        <!-- 3. 标题层级规范化：大标题用 h1，副标题用 h2，避免直接跳到 h3 -->
+        <header class="page-header">
+            <h1>欢迎访问豆芽人联盟的 Wiki</h1>
+            <p class="subtitle">豆芽人联盟是一个以漫画为主的二次元IP，也是一个充满活力的团队。</p>
+        </header>
+
+        <section class="intro-section">
+            <h2>第一次了解必看</h2>
+            <!-- TODO: 这里以后再补充详细介绍内容 -->
+            <p>内容正在筹备中，敬请期待...</p>
+        </section>
+    </main>
+</body>
+</html>
