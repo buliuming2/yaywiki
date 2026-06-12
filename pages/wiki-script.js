@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navList = document.getElementById('sidebar-nav');
 
     // 1. 启动：先获取我们之前手写好的目录树 JSON
-    fetch('./pages/sidebar-tree.json')
+    fetch('./sidebar-tree.json')
         .then(response => {
             if (!response.ok) throw new Error("无法加载目录配置文件");
             return response.json();
