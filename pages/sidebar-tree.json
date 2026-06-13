@@ -1,3 +1,35 @@
 [
-  { "title": "测试", "path": "../wikimd/cs.md" }
+  {"title": "关于本Wiki", "path": "../wikimd/home.md" },
+  {
+    "title": "概念",
+    "children": [
+      { "title": "什么是豆芽人联盟", "path": "../wikimd/1-1/1-1-1.md" },
+      { "title": "豆芽人联盟发展史", "path": "../wikimd/1-1/1-1-2.md" },
+      { "title": "豆芽人联盟的组织结构", "path": "../wikimd/1-1/1-1-3.md" }
+    ]
+  },
+  {
+    "title": "团队体系",
+    "children": [
+      { "title": "豆芽人联盟的团队体系是什么？有哪些", "path": "../wikimd/1-2/1-2-1.md" },
+      { "title": "五常", "path": "../wikimd/1-2/1-2-2.md" },
+      { "title": "五下", "path": "../wikimd/1-2/1-2-3.md" },
+      { "title": "星创委员会", "path": "../wikimd/1-2/1-2-4.md" }
+    ]
+  },
+  {
+    "title": "YOC",
+    "children": [
+      { "title": "YOC简介", "path": "../wikimd/1-3/1-3-1.md" },
+      { "title": "渚浔笑辞", "path": "../wikimd/1-3/1-3-2.md" },
+      { "title": "小鸟游刘网", "path": "../wikimd/1-3/1-3-3.md" },
+      { "title": "千日坂芷芽", "path": "../wikimd/1-3/1-3-4.md" },
+      { "title": "芽岚寒枫", "path": "../wikimd/1-3/1-3-5.md" },
+      { "title": "棱斯新耀羽", "path": "../wikimd/1-3/1-3-6.md" },
+      { "title": "阿萨克无芽", "path": "../wikimd/1-3/1-3-7.md" },
+      { "title": "芽岚摇光", "path": "../wikimd/1-3/1-3-8.md" },
+      { "title": "芽羽只因", "path": "../wikimd/1-3/1-3-9.md" },
+      { "title": "加比镜岚", "path": "../wikimd/1-3/1-3-10.md" }
+    ]
+  }
 ]

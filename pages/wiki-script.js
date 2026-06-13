@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(treeData => {
-            renderSidebarTree(treeData); // 渲染左侧菜单
+            renderSidebarTree(treeData, navList); // 渲染左侧菜单（传入数据与父容器）
             
-            // 默认加载第一篇文章
-            if (treeData.length > 0) {
+            // 默认加载第一篇文章 (这里假设第一层有文件，或者你可以按需修改)
+            if (treeData.length > 0 && treeData[0].path) {
                 loadMarkdown(treeData[0].path);
             }
         })
@@ -20,28 +20,56 @@ document.addEventListener('DOMContentLoaded', () => {
             mdContainer.innerHTML = `<p style="color:red">初始化失败: ${err.message}</p>`;
         });
 
-    // 2. 渲染左侧导航树
-    function renderSidebarTree(data) {
-        navList.innerHTML = ''; // 清空旧菜单
+    // 2. 渲染左侧导航树 (支持无限极嵌套)
+    function renderSidebarTree(data, parentElement) {
         data.forEach(item => {
             const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = '#';
-            a.textContent = item.title.replace('.md', ''); // 去掉后缀显示
-            a.dataset.path = item.path;
-
-            // 点击事件：加载对应的 MD 文件
-            a.addEventListener('click', (e) => {
-                e.preventDefault();
-                loadMarkdown(item.path);
+            
+            // 🔹 如果有 children，说明它是父级分类（文件夹）
+            if (item.children && item.children.length > 0) {
+                const a = document.createElement('a');
+                a.href = '#';
+                a.textContent = item.title;
+                a.classList.add('folder-title'); // 加个类名方便写CSS样式
                 
-                // 切换高亮状态
-                navList.querySelectorAll('a').forEach(link => link.classList.remove('active'));
-                a.classList.add('active');
-            });
+                // 点击父级时，切换子菜单的显示/隐藏
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const subMenu = li.querySelector('.sub-menu');
+                    if (subMenu) subMenu.classList.toggle('open');
+                    a.classList.toggle('expanded');
+                });
 
-            li.appendChild(a);
-            navList.appendChild(li);
+                li.appendChild(a);
+                
+                // 创建子菜单容器，并【递归调用自己】，把子节点渲染进去
+                const ul = document.createElement('ul');
+                ul.className = 'sub-menu';
+                renderSidebarTree(item.children, ul); 
+                
+                li.appendChild(ul);
+            } 
+            // 🔹 如果没有 children，说明它是具体的 MD 文件
+            else {
+                const a = document.createElement('a');
+                a.href = '#';
+                a.textContent = item.title.replace('.md', ''); // 去掉后缀显示
+                a.dataset.path = item.path;
+
+                // 点击事件：加载对应的 MD 文件
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loadMarkdown(item.path);
+                    
+                    // 切换高亮状态
+                    navList.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                    a.classList.add('active');
+                });
+
+                li.appendChild(a);
+            }
+            
+            parentElement.appendChild(li);
         });
     }
 
